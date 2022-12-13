@@ -326,6 +326,7 @@ static bool mctl_phy_write_leveling(struct dram_para *para)
 
 static bool mctl_phy_read_calibration(struct dram_para *para)
 {
+	udelay(0);
 	bool result = true;
 	u32 val, tmp;
 

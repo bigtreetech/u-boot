@@ -13,6 +13,7 @@
 #include <axp209.h>
 #include <axp221.h>
 #include <axp305.h>
+#include <axp1530.h>
 #include <axp809.h>
 #include <axp818.h>
 
@@ -53,5 +54,11 @@ int axp_set_fldo(int fldo_num, unsigned int mvolt);
 int axp_set_sw(bool on);
 int axp_init(void);
 int axp_get_sid(unsigned int *sid);
+
+//----------------------------------------------------------------
+// axp1530
+
+int pmu_axp1530_set_voltage(char *name, unsigned int set_vol, unsigned int onoff);
+int pmu_axp1530_get_voltage(char *name);
 
 #endif
