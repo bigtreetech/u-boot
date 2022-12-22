@@ -633,23 +633,23 @@ void sunxi_board_init(void)
 #if defined(CONFIG_AXP1530_POWER)
     power_failed |= pmu_axp1530_set_voltage("dcdc1", 960, 1);
     power_volume = pmu_axp1530_get_voltage("dcdc1");
-    printf("dcdc1_power: %d \n", power_volume);
+    // printf("dcdc1_power: %d \n", power_volume);
 
     power_failed |= pmu_axp1530_set_voltage("dcdc2", 1000, 1);
     power_volume = pmu_axp1530_get_voltage("dcdc2");
-    printf("dcdc2_power: %d \n", power_volume);
+    // printf("dcdc2_power: %d \n", power_volume);
 
     power_failed |= pmu_axp1530_set_voltage("dcdc3", 1500, 1);
     power_volume = pmu_axp1530_get_voltage("dcdc3");
-    printf("dcdc3_power: %d \n", power_volume);
+    // printf("dcdc3_power: %d \n", power_volume);
 
     power_failed |= pmu_axp1530_set_voltage("aldo1", 1800, 1);
     power_volume = pmu_axp1530_get_voltage("aldo1");
-    printf("aldo1_power: %d \n", power_volume);
+    // printf("aldo1_power: %d \n", power_volume);
 
     power_failed |= pmu_axp1530_set_voltage("dldo1", 3300, 1);
     power_volume = pmu_axp1530_get_voltage("dldo1");
-    printf("dldo1_power: %d \n", power_volume);
+    // printf("dldo1_power: %d \n", power_volume);
 #endif
 #ifdef CONFIG_AXP209_POWER
 	power_failed |= axp_set_aldo4(CONFIG_AXP_ALDO4_VOLT);

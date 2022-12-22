@@ -130,7 +130,7 @@ int axp_init(void)
     {
         /*pmu type AXP1530*/
         // pmu_axp1530_necessary_reg_enable();
-        printf("==== PMU: AXP1530 ====\n");
+        // printf("==== PMU: AXP1530 ====\n");
         return 0;
     }
     else
