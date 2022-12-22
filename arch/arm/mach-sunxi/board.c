@@ -505,3 +505,47 @@ void enable_caches(void)
 	dcache_enable();
 }
 #endif
+
+#include <common.h>
+#include <dm.h>
+#include <dm/device-internal.h>
+#include <linux/usb/gadget.h>
+
+#define MAX_UDC_DEVICES 4
+static struct udevice *dev_array[MAX_UDC_DEVICES];
+int board_usb_init(int index, enum usb_init_type init)
+{
+	int ret;
+	struct udevice *dev = NULL;
+
+	if (index < 0 || index >= ARRAY_SIZE(dev_array))
+		return -EINVAL;
+	if (dev_array[index])
+		return 0;
+	ret = uclass_get_device_by_seq(UCLASS_USB_GADGET_GENERIC, index, &dev);
+	if (!dev || ret) {
+		ret = uclass_get_device(UCLASS_USB_GADGET_GENERIC, index, &dev);
+		if (!dev || ret) {
+			pr_err("No USB device found\n");
+			return -ENODEV;
+		}
+	}
+	dev_array[index] = dev;
+	return 0;
+}
+
+int board_usb_cleanup(int index, enum usb_init_type init)
+{
+#if CONFIG_IS_ENABLED(DM_DEVICE_REMOVE)
+	int ret;
+	if (index < 0 || index >= ARRAY_SIZE(dev_array))
+		return -EINVAL;
+
+	ret = device_remove(dev_array[index], DM_REMOVE_NORMAL);
+	if (!ret)
+		dev_array[index] = NULL;
+	return ret;
+#else
+	return -ENOSYS;
+#endif
+}
