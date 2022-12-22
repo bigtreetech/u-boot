@@ -17,6 +17,8 @@
 
 	aliases {
 		serial0 = &uart0;
+		mc0 = &mmc0;
+		mmc1 = &mmc2;
 	};
 
 	chosen {
@@ -67,8 +69,15 @@
 
 &mmc0 {
 	vmmc-supply = <&reg_dcdce>;
-	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>;	/* PF6 */
 	bus-width = <4>;
+	status = "okay";
+};
+
+&mmc2 {
+    vmmc-supply = <&reg_dcdce>;
+    no-1-8-v;
+	bus-width = <8>;
+    non-removable;
 	status = "okay";
 };
 
