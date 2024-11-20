@@ -60,7 +60,9 @@ int udc_device_put(struct udevice *udev)
 	return -ENOSYS;
 #endif
 }
+// #error "1"
 #else
+#error "2"
 /* Backwards hardware compatibility -- switch to DM_USB_GADGET */
 static int legacy_index;
 int udc_device_get_by_index(int index, struct udevice **udev)
