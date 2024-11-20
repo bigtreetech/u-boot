@@ -541,7 +541,7 @@ struct mmc *sunxi_mmc_init(int sdc_no)
 	cfg->b_max = CONFIG_SYS_MMC_MAX_BLK_COUNT;
 
 	cfg->f_min = 400000;
-	cfg->f_max = 52000000;
+	cfg->f_max = 20000000;
 
 	if (mmc_resource_init(sdc_no) != 0)
 		return NULL;
