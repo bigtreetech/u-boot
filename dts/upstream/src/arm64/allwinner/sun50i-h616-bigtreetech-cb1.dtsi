@@ -13,10 +13,6 @@
 #include <dt-bindings/leds/common.h>
 
 / {
-	aliases {
-		ethernet0 = &rtl8189ftv;
-	};
-
 	leds {
 		compatible = "gpio-leds";
 
@@ -69,8 +65,6 @@
 
 &mmc0 {
 	vmmc-supply = <&reg_dldo1>;
-	/* Card detection pin is not connected */
-	broken-cd;
 	bus-width = <4>;
 	status = "okay";
 };
@@ -80,13 +74,10 @@
 	vqmmc-supply = <&reg_vcc_wifi_io>;
 	mmc-pwrseq = <&wifi_pwrseq>;
 	bus-width = <4>;
+	max-frequency = <25000000>;
 	non-removable;
 	mmc-ddr-1_8v;
 	status = "okay";
-
-	rtl8189ftv: wifi@1 {
-		reg = <1>;
-	};
 };
 
 &mmc2 {
