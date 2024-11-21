@@ -555,9 +555,13 @@ static void sunxi_spl_store_dram_size(phys_addr_t dram_size)
 	spl->dram_size = dram_size >> 20;
 }
 
+
+int pmu_axp313a_set_voltage(char *name, uint set_vol, uint onoff);
+int pmu_axp313a_get_voltage(char *name);
 void sunxi_board_init(void)
 {
 	int power_failed = 0;
+	int power_volume = 0;
 
 #ifdef CONFIG_LED_STATUS
 	if (IS_ENABLED(CONFIG_SPL_DRIVERS_MISC))
@@ -589,11 +593,17 @@ void sunxi_board_init(void)
 	power_failed |= axp_set_dcdc5(CONFIG_AXP_DCDC5_VOLT);
 #endif
 #ifdef CONFIG_AXP_DCDC2_VOLT
-    power_failed |= axp_set_dcdc1(960);
-    power_failed |= axp_set_dcdc2(1000);
-    power_failed |= axp_set_dcdc3(1500);
+    // power_failed |= axp_set_dcdc1(960);
+    // power_failed |= axp_set_dcdc2(1000);
+    // power_failed |= axp_set_dcdc3(1500);
     // power_failed |= axp_set_aldo1(1800);
     // power_failed |= axp_set_dldo(1,3300);
+
+    power_failed |= pmu_axp313a_set_voltage("dcdc1", 960, 1);
+    power_failed |= pmu_axp313a_set_voltage("dcdc2", 1000, 1);
+    power_failed |= pmu_axp313a_set_voltage("dcdc3", 1500, 1);
+    power_failed |= pmu_axp313a_set_voltage("aldo1", 1800, 1);
+    power_failed |= pmu_axp313a_set_voltage("dldo1", 3300, 1);
 
 	// power_failed |= axp_set_dcdc2(CONFIG_AXP_DCDC2_VOLT);
 	// power_failed |= axp_set_dcdc3(CONFIG_AXP_DCDC3_VOLT);
@@ -655,6 +665,19 @@ void sunxi_board_init(void)
 		clock_set_pll1(get_board_sys_clk());
 	else
 		printf("Failed to set core voltage! Can't set CPU frequency\n");
+
+
+
+    power_volume = pmu_axp313a_get_voltage("dcdc1");
+	printf("dcdc1: %d\n", power_volume);
+    power_volume = pmu_axp313a_get_voltage("dcdc2");
+	printf("dcdc2: %d\n", power_volume);
+    power_volume = pmu_axp313a_get_voltage("dcdc3");
+	printf("dcdc3: %d\n", power_volume);
+    power_volume = pmu_axp313a_get_voltage("aldo1");
+	printf("aldo1: %d\n", power_volume);
+    power_volume = pmu_axp313a_get_voltage("dldo1");
+	printf("dldo1: %d\n", power_volume);
 }
 #endif /* CONFIG_XPL_BUILD */
 
