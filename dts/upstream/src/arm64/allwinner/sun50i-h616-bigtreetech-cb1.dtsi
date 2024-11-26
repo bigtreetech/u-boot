@@ -89,6 +89,15 @@
 	};
 };
 
+&mmc2 {
+	vmmc-supply = <&reg_dldo1>;
+	no-1-8-v;
+	bus-width = <8>;
+	max-frequency = <20000000>;
+	non-removable;
+	status = "okay";
+};
+
 &r_i2c {
 	status = "okay";
 
