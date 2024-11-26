@@ -610,6 +610,8 @@ static void mctl_auto_detect_dram_size(struct dram_para *para)
 	para->rows = 18;
 	mctl_core_init(para);
 
+	udelay(50);
+
 	for (para->rows = 13; para->rows < 18; para->rows++) {
 		/* 8 banks, 8 bit per byte and 16/32 bit width */
 		if (mctl_mem_matches((1 << (para->rows + para->cols +
@@ -620,6 +622,8 @@ static void mctl_auto_detect_dram_size(struct dram_para *para)
 	/* detect column address bits */
 	para->cols = 11;
 	mctl_core_init(para);
+
+	udelay(50);
 
 	for (para->cols = 8; para->cols < 11; para->cols++) {
 		/* 8 bits per byte and 16/32 bit width */

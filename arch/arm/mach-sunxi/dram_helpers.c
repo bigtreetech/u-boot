@@ -41,6 +41,7 @@ bool mctl_mem_matches_base(u32 offset, ulong base)
 	val_base = readl(base);
 	val_offset = readl(base + offset);
 
+	dsb();
 	/* Try to write different values to RAM at two addresses */
 	writel(0, base);
 	writel(0xaa55aa55, base + offset);
