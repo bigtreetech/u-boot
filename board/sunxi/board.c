@@ -574,6 +574,7 @@ static void sunxi_spl_store_dram_size(phys_addr_t dram_size)
 void sunxi_board_init(void)
 {
 	int power_failed = 0;
+	u8 data[2];
 
 #ifdef CONFIG_LED_STATUS
 	if (IS_ENABLED(CONFIG_SPL_DRIVERS_MISC))
@@ -665,6 +666,23 @@ void sunxi_board_init(void)
 		clock_set_pll1(get_board_sys_clk());
 	else
 		printf("Failed to set core voltage! Can't set CPU frequency\n");
+
+	i2c_set_bus_num(1);
+	data[0] = 0;
+	data[1] = 1;
+	i2c_write(0x10, 0xfe, 1, data, 2);
+	i2c_write(0x10, 2, 1, data, 2);
+	data[1] = 1;
+	i2c_write(0x10, 2, 1, data, 2);
+	data[1] = 0xf;
+	i2c_write(0x10, 0x16, 1, data, 2);
+	data[1] = 3;
+	i2c_write(0x10, 0x14, 1, data, 2);
+	data[1] = 0x60;
+	i2c_write(0x10, 0xfe, 1, data, 2);
+	data[0] = 0x08;
+	data[1] = 0x14;
+	i2c_write(0x10, 0, 1, data, 2);
 }
 #endif /* CONFIG_XPL_BUILD */
 
