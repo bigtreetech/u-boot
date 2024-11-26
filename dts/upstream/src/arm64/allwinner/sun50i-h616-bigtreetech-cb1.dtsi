@@ -23,7 +23,7 @@
 		led-0 {
 			function = LED_FUNCTION_STATUS;
 			color = <LED_COLOR_ID_GREEN>;
-			gpios = <&pio 7 5 GPIO_ACTIVE_HIGH>; /* PH5 */
+			gpios = <&pio 7 5 GPIO_ACTIVE_LOW>; /* PH5 */
 		};
 	};
 
