@@ -37,6 +37,7 @@ bool mctl_mem_matches_base(u32 offset, ulong base)
 	u32 val_offset;
 	bool ret;
 
+	dsb();
 	/* Save original values */
 	val_base = readl(base);
 	val_offset = readl(base + offset);
@@ -49,9 +50,11 @@ bool mctl_mem_matches_base(u32 offset, ulong base)
 	/* Check if the same value is actually observed when reading back */
 	ret = readl(base) == readl(base + offset);
 
+	dsb();
 	/* Restore original values */
 	writel(val_base, base);
 	writel(val_offset, base + offset);
+	dsb();
 	return ret;
 }
 
