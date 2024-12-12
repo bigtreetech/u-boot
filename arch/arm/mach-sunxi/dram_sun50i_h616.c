@@ -1399,9 +1399,24 @@ static void mctl_auto_detect_dram_size(const struct dram_para *para,
 static unsigned long mctl_calc_size(const struct dram_config *config)
 {
 	u8 width = config->bus_full_width ? 4 : 2;
+	unsigned long size;
 
 	/* 8 banks */
-	return (1ULL << (config->cols + config->rows + 3)) * width * config->ranks;
+	size = (1ULL << (config->cols + config->rows + 3)) * width * config->ranks;
+
+	printf("DRAM base address is defined as 0x%lx\n", mctl_mem_address(0));
+	printf("DRAM has %u b/raw, %u b/col, %u B/width, %u #rank and 8 #bank\n",
+	       (unsigned)config->rows, (unsigned)config->cols,
+	       (unsigned)width, (unsigned)config->ranks);
+	printf("DRAM top address must be less than 0x%lx\n", size);
+
+	/* Fix size if last usable memory address is not valid */
+	if (!mctl_mem_matches_top(size)) {
+		size = (size * 3) / 4;
+		printf("DRAM top address must be less than 0x%lx\n", size);
+	}
+
+	return size;
 }
 
 static const struct dram_para para = {

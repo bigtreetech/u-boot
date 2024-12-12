@@ -62,4 +62,33 @@ bool mctl_mem_matches(u32 offset)
 {
 	return mctl_mem_matches_base(offset, CFG_SYS_SDRAM_BASE);
 }
+
+/*
+ * Test if memory at offset matches memory at top of DRAM
+ */
+bool mctl_mem_matches_top(ulong offset)
+{
+	static const unsigned value= 0xaa55aa55;
+
+	/* Take last usable memory address */
+	offset -= sizeof(value);
+	dsb();
+	/* Set zero at last usable memory address */
+	writel(0, (ulong)CFG_SYS_SDRAM_BASE + offset);
+	dsb();
+	/* Set other value at last usable memory address */
+	writel(value, (ulong)CFG_SYS_SDRAM_BASE + offset);
+	dsb();
+	/* Check if the same value is actually observed when reading back */
+	return readl((ulong)CFG_SYS_SDRAM_BASE + offset) == value;
+}
+
+/*
+ * Get memory address at offset of DRAM
+ */
+ulong mctl_mem_address(ulong offset)
+{
+	return (ulong)CFG_SYS_SDRAM_BASE + offset;
+}
+
 #endif
