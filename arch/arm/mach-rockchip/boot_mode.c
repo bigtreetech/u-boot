@@ -77,9 +77,24 @@ __weak int rockchip_dnl_key_pressed(void)
 void rockchip_dnl_mode_check(void)
 {
 	if (rockchip_dnl_key_pressed()) {
-		printf("download key pressed, entering download mode...");
-		set_back_to_bootrom_dnl_flag();
-		do_reset(NULL, 0, 0, NULL);
+		printf("download key pressed, entering download mode...\n");
+
+		// printf("\nmaskrom mode...\n");
+		// set_back_to_bootrom_dnl_flag();
+		// do_reset(NULL, 0, 0, NULL);
+
+		// printf("\nloader mode...\n");
+		// run_command("rockusb 0 mmc 0", 0);
+
+		printf("boot_mode: ums NVMe...\n");
+		if (run_command("pci enum; nvme scan; ums 0 nvme 0", 0)) {
+			printf("boot_mode: ums NVMe failed! ums to eMMC now!\n");
+			if (run_command("ums 0 mmc 0", 0)) {
+				printf("boot_mode: ums eMMC failed! goto maskrom mode...\n");
+				set_back_to_bootrom_dnl_flag();
+				do_reset(NULL, 0, 0, NULL);
+			}
+		}
 	}
 }
 

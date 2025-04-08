@@ -1048,10 +1048,26 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
 			cdev->desc.bMaxPacketSize0 =
 				cdev->gadget->ep0->maxpacket;
 			if (gadget->speed >= USB_SPEED_SUPER) {
-				cdev->desc.bcdUSB = cpu_to_le16(0x0310);
+				/*
+				 * bcdUSB should be 0x0310 for superspeed,
+				 * but we change it to 0x0311 for rockusb.
+				 */
+				if (!strcmp(cdev->driver->name, "usb_dnl_rockusb")) {
+					cdev->desc.bcdUSB = cpu_to_le16(0x0311);
+				} else {
+					cdev->desc.bcdUSB = cpu_to_le16(0x0310);
+				}
 				cdev->desc.bMaxPacketSize0 = 9;
 			} else {
-				cdev->desc.bcdUSB = cpu_to_le16(0x0200);
+				/*
+				 * bcdUSB should be 0x0200 for highspeed,
+				 * but we change it to 0x0201 for rockusb.
+				 */
+				if (!strcmp(cdev->driver->name, "usb_dnl_rockusb")) {
+					cdev->desc.bcdUSB = cpu_to_le16(0x0201);
+				} else {
+					cdev->desc.bcdUSB = cpu_to_le16(0x0200);
+				}
 			}
 			value = min(w_length, (u16) sizeof cdev->desc);
 			memcpy(req->buf, &cdev->desc, value);
@@ -1086,8 +1102,16 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
 			 * USB compliance test (USB 2.0 Command Verifier)
 			 * also issues this request, return for now for
 			 * USB 2.0 connection.
+			 *
+			 * HACK: only for rockusb command.
+			 * Rockchip upgrade tool use bcdUSB (0x0201) field
+			 * distinguishing maskrom or loader device at present.
+			 * Unfortunately, it conflict with Windows 8 and beyond
+			 * which request BOS descriptor in this case that bcdUSB
+			 * is set to 0x0201.
 			 */
-			if (gadget->speed >= USB_SPEED_SUPER) {
+			if ((gadget->speed >= USB_SPEED_SUPER) ||
+			    !strcmp(cdev->driver->name, "usb_dnl_rockusb")) {
 				value = bos_desc(cdev);
 				value = min(w_length, (u16)value);
 			}

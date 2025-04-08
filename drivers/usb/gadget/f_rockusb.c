@@ -747,6 +747,11 @@ void __weak rkusb_set_reboot_flag(int flag)
 	struct f_rockusb *f_rkusb = get_rkusb();
 
 	printf("rockkusb set reboot flag: %d\n", f_rkusb->reboot_flag);
+#if (CONFIG_ROCKCHIP_BOOT_MODE_REG != 0)
+void set_back_to_bootrom_dnl_flag(void);
+	if (f_rkusb->reboot_flag == 0x03)
+		set_back_to_bootrom_dnl_flag();
+#endif
 }
 
 static void compl_do_reset(struct usb_ep *ep, struct usb_request *req)
