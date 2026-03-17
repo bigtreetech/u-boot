@@ -23,8 +23,11 @@ void clock_init_safe(void)
 	udelay(1);
 
 	if (IS_ENABLED(CONFIG_MACH_SUN50I_H616) ||
-	    IS_ENABLED(CONFIG_MACH_SUN55I_A523))
+	    IS_ENABLED(CONFIG_MACH_SUN55I_A523)) {
 		setbits_le32(prcm + CCU_PRCM_RES_CAL_CTRL, 2);
+		/* enable GPU */
+		writel(0, 0x7010254);
+	}
 	udelay(1);
 
 	if (IS_ENABLED(CONFIG_MACH_SUN50I_H616) ||
