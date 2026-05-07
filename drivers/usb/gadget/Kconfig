@@ -196,6 +196,12 @@ config USB_FUNCTION_MASS_STORAGE
 	  Enable mass storage protocol support in U-Boot. It allows exporting
 	  the eMMC/SD card content to HOST PC so it can be mounted.
 
+config USB_FUNCTION_VENDOR_ID
+	string "USB mass storage gadget vendor id"
+	default "Linux   "
+	help
+	  This string is displayed in the USB mass storage gadget device label.
+
 config USB_FUNCTION_ROCKUSB
 	bool "Enable USB rockusb gadget"
 	depends on ARCH_ROCKCHIP
